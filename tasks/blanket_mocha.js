@@ -391,7 +391,7 @@ module.exports = function(grunt) {
                         //Make sure it doesn't print 'true%'
                         globalThreshold = globalThreshold === true ? 0 : globalThreshold
                         grunt.log.writeln("Global Coverage Results: (" + globalThreshold + "% minimum)");
-                        fs.writeFileSync("code-coverage.txt", "Code coverage: " + passFailMessage("global", totals.coveredLines, totals.totalLines, globalThreshold, /*printPassing*/true));
+                        fs.writeFileSync("code-coverage.txt", "Global code coverage results: " + passFailMessage("global", totals.coveredLines, totals.totalLines, globalThreshold, /*printPassing*/true));
                         printPassFailMessage("global", totals.coveredLines, totals.totalLines, globalThreshold, /*printPassing*/true);
                     }
                     grunt.log.writeln();
