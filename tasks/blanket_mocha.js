@@ -84,6 +84,25 @@ module.exports = function(grunt) {
 
     };
 
+    var passFailMessage = function(name, numCovered, numTotal, threshold, printPassing) {
+      var percent = (numCovered / numTotal) * 100;
+      var pass = (percent >= threshold);
+
+      //If not passed, check if file is marked for manual exclusion. Else, fail it.
+      var result = pass ? "PASS" : (  excludedFiles.indexOf(name) === -1 /*File not found*/  ? "FAIL" : "SKIP");
+
+      var percentDisplay = Math.floor(percent);
+      if (percentDisplay < 10) {
+          percentDisplay = "  " + percentDisplay;
+      } else if (percentDisplay < 100) {
+          percentDisplay = " " + percentDisplay;
+      }
+
+      var msg = result + " [" + percentDisplay + "%] : " + name + " (" + numCovered + " / " + numTotal + ")";
+
+      return msg;
+    };
+
 
   // Manage runners listening to phantomjs
   var phantomjsEventManager = (function() {
@@ -369,6 +388,7 @@ module.exports = function(grunt) {
                     if (globalThreshold) {
                         grunt.log.writeln();
                         grunt.log.writeln("Global Coverage Results: (" + globalThreshold + "% minimum)");
+                        fs.writeFileSync("code-coverage.txt", "Code coverage: " + passFailMessage("global", totals.coveredLines, totals.totalLines, globalThreshold, /*printPassing*/true));
                         printPassFailMessage("global", totals.coveredLines, totals.totalLines, globalThreshold, /*printPassing*/true);
                     }
                     grunt.log.writeln();
